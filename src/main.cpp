@@ -7,7 +7,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-using GRIDFunc = void (*)(const char* jsonPath);
+using GRIDFunc = void (*)(const char* jsonPath, int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
 	std::cout << "GRID Launcher v0.1" << std::endl;
@@ -45,5 +45,5 @@ int main(int argc, char* argv[]) {
         std::cout << "failed to load function: start" << std::endl;
     }
 
-	GRIDStart(jsonPath.c_str());
+	GRIDStart(jsonPath.c_str(), argc-2, argv+2);
 }
