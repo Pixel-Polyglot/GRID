@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(CHIPrun LANGUAGES C CXX)
+project(GRID LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -m64")
+if(MSVC)
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MD")
+    else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MDd")
+    endif()
+endif()
+
+# set(CMAKE_CXX_FLAGS "-Wall")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")

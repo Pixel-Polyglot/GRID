@@ -1,6 +1,14 @@
 #include <iostream>
-#include <dlfcn.h>
-#include <unistd.h>
+#ifdef _WIN32
+	#include <windows.h>
+	#include <direct.h>
+	#define getcwd _getcwd
+	#define dlsym GetProcAddress
+	#define PATH_MAX MAX_PATH
+#else
+	#include <unistd.h>
+	#include <dlfcn.h>
+#endif
 #include <limits.h>
 #include <string>
 #include <fstream>
@@ -10,6 +18,7 @@ using json = nlohmann::json;
 using GRIDFunc = void (*)(const char* jsonPath, int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
+	std::cout << "(G)raphical(R)untime for (I)nteractive(D)evelopment" << std::endl;
 	std::cout << "GRID Launcher v0.1" << std::endl;
 
 	if(argc < 2) {
@@ -34,15 +43,27 @@ int main(int argc, char* argv[]) {
 
 	std::string GRIDPath = std::string(cwd) + "/" + data["GRIDCoreLib"].get<std::string>();
 
-	void* hGRIDLib = dlopen(GRIDPath.c_str(), RTLD_LAZY);
+	#ifdef _WIN32
+		HMODULE hGRIDLib = LoadLibrary(GRIDPath.c_str());
+	#else
+		void* hGRIDLib = dlopen(GRIDPath.c_str(), RTLD_LAZY);
+	#endif
+
     if (hGRIDLib == nullptr) {
-        std::cout << "failed to load library: " << dlerror() << std::endl;
+	#ifdef _WIN32
+		LPSTR msg = nullptr;
+		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0, (LPSTR)&msg, 0, nullptr);
+		std::cerr << "Failed to load library: " << GRIDPath << "\n" << "Windows error: " << (msg ? msg : "Unknown error") << std::endl;
+		LocalFree(msg);
+	#else
+		std::cout << "Failed to load library: " << dlerror() << " GRIDPath.c_str()" std::endl;
+	#endif
     }
 
-	GRIDFunc GRIDStart = (GRIDFunc) dlsym(hGRIDLib, "start");
+	GRIDFunc GRIDStart = (GRIDFunc)dlsym(hGRIDLib, "start");
 
     if (GRIDStart == nullptr) {
-        std::cout << "failed to load function: start" << std::endl;
+        std::cout << "Failed to load function: start" << std::endl;
     }
 
 	GRIDStart(jsonPath.c_str(), argc-2, argv+2);
