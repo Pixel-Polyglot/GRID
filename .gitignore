@@ -1,2 +1,4 @@
-.vscode*
+.vscode
+.vs
 build
+CMakeSettings.json

@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 		std::cerr << "Failed to load library: " << GRIDPath << "\n" << "Windows error: " << (msg ? msg : "Unknown error") << std::endl;
 		LocalFree(msg);
 	#else
-		std::cout << "Failed to load library: " << dlerror() << " GRIDPath.c_str()" std::endl;
+		std::cout << "Failed to load library: " << dlerror() << " " << GRIDPath.c_str() << std::endl;
 	#endif
     }
 
