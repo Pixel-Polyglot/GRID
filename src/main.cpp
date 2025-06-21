@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
 	char cwd[PATH_MAX];
     getcwd(cwd, sizeof(cwd));
 	std::string jsonPath = std::string(cwd) + "/" + argv[1];
+	std::string relativePath = jsonPath.substr(0, jsonPath.find_last_of("/"));
 
 	std::ifstream f(jsonPath);
 	json data;
@@ -41,7 +42,7 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	std::string GRIDPath = std::string(cwd) + "/" + data["GRIDCoreLib"].get<std::string>();
+	std::string GRIDPath = relativePath + "/" + data["GRIDCoreLib"].get<std::string>();
 
 	#ifdef _WIN32
 		HMODULE hGRIDLib = LoadLibrary(GRIDPath.c_str());
