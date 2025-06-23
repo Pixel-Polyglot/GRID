@@ -15,7 +15,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-using GRIDFunc = void (*)(const char* jsonPath, int argc, char* argv[]);
+using GRIDFunc = void (*)(std::string jsonPath, int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
 	std::cout << "(G)raphical(R)untime for (I)nteractive(D)evelopment" << std::endl;
@@ -67,5 +67,5 @@ int main(int argc, char* argv[]) {
         std::cout << "Failed to load function: start" << std::endl;
     }
 
-	GRIDStart(jsonPath.c_str(), argc-2, argv+2);
+	GRIDStart(jsonPath, argc-2, argv+2);
 }
