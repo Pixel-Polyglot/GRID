@@ -18,7 +18,7 @@ using json = nlohmann::json;
 using GRIDFunc = void (*)(std::string jsonPath, int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
-	std::cout << "(G)raphical(R)untime for (I)nteractive(D)evelopment" << std::endl;
+	std::cout << "(G)raphical (R)untime for (I)nteractive (D)evelopment" << std::endl;
 	std::cout << "GRID Launcher v0.1" << std::endl;
 
 	if(argc < 2) {
